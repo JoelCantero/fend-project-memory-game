@@ -53,7 +53,7 @@ h1 {
 .deck .card {
     height: 125px;
     width: 125px;
-    
+    transform: rotateY(180deg);
     background: #2e3d49;
     font-size: 0;
     color: #ffffff;
@@ -64,10 +64,19 @@ h1 {
     align-items: center;
 }
 
+.deck .card li {
+    transform: rotateY(180deg);
+}
 .deck .card.open {
-    transform: rotateY(0);
+    transform: rotateY(0deg);
     background: #02b3e4;
     cursor: default;
+    transition: 0.2s;
+}
+
+.deck .card.open li {
+    transform: rotateY(0deg);
+    transition: 0.2s;
 }
 
 .deck .card.show {

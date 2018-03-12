@@ -1,7 +1,8 @@
 /*
  * Create a list that holds all of your cards
  */
-let selectedCard = [];
+let openCards = [];
+let deck = document.querySelector('.deck');
 
 /*
  * Display the cards on the page
@@ -10,9 +11,17 @@ let selectedCard = [];
  *   - add each card's HTML to the page
  */
 
- function displayCard() {
- 	this.add('show', 'open');
+ function displayCard(card) {
+ 	openCards.push(card);
+ 	card.classList.add('show', 'open');
  }
+ function hideCard(card) {
+ 	card.classList.remove('show', 'open');
+ }
+function matchCards(card1, card2) {
+	card1.classList.add('match');
+	card2.classList.add('match');
+}
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -30,35 +39,21 @@ function shuffle(array) {
 }
 
 
-let deck = document.querySelector('.deck');
 deck.addEventListener ('click', function cardClick(event) {
-	if (event.target.nodeName === 'LI') {
-	if (selectedCard.length == 0) {
-		selectedCard.push(event.target);
-		selectedCard[0].classList.toggle('show');
-		selectedCard[0].classList.toggle('open');
-		console.log(selectedCard[0].firstElementChild.className);
-		
-	}
-	else {
-		selectedCard.push(event.target);
-		selectedCard[1].displayCard();
-		selectedCard[1].displayCard();
-		if (selectedCard[0].firstElementChild.className == selectedCard[1].firstElementChild.className) {
-		selectedCard[0].classList.add('match');
-		selectedCard[1].classList.add('match');
-		selectedCard = [];
-		}
-		else {
-		selectedCard[0].classList.toggle('show');
-		selectedCard[0].classList.toggle('open');
-		selectedCard[1].classList.toggle('show');
-		selectedCard[1].classList.toggle('open');
-
-		}
-	}
+	if (event.target.nodeName === 'LI' && !event.target.classList.contains('match')) {
+			displayCard(event.target);
+			if (openCards.length > 1) {
+				if (openCards[0].firstElementChild.className === openCards[1].firstElementChild.className && openCards[0] != openCards[1]) {
+					matchCards(openCards[0], openCards[1]);
+					openCards = [];
+				}
+				else {
+					hideCard(openCards[0]);
+					hideCard(openCards[1]);
+					openCards = [];
+				}
+			}
 	}	
-	console.log('Card clicked');
 });
 
 
