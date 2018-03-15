@@ -124,6 +124,7 @@ function newGame() {
 	counterMatchCards = 0;
 	moves.textContent = 0;
 	timer.textContent = 0;
+	resetStars();
 	hideAllCards(cards);
 	/* Creates an document fragment to avoid 16 reflow and repaint */
 	let virtualDOM = document.createDocumentFragment();
@@ -139,6 +140,12 @@ function newGame() {
 	}
 	/* When we have shuffled all card's SYMBOLS, then we reflow and repaint once with virtualDOM */
 	cards = virtualDOM;
+
+}
+
+function resetStars() {
+	starArray[1].className = 'fa fa-star';
+	starArray[2].className = 'fa fa-star';
 
 }
 
