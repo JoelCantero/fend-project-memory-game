@@ -1,32 +1,133 @@
-/*
- * Create a list that holds all of your cards
- */
+
+/* List that holds all of card SYMBOLS */
+let symbols = [
+	'fa fa-css3', 
+	'fa fa-css3', 
+	'fa fa-wifi', 
+	'fa fa-wifi', 
+	'fa fa-html5', 
+	'fa fa-html5', 
+	'fa fa-git', 
+	'fa fa-git', 
+	'fa fa-chrome', 
+	'fa fa-chrome', 
+	'fa fa-tablet', 
+	'fa fa-tablet', 
+	'fa fa-laptop', 
+	'fa fa-laptop', 
+	'fa fa-google', 
+	'fa fa-google'
+];
+
 let openCards = [];
+
+let counterMatchCards = 0;
+
+/* Selectors */
+
+let cards = document.querySelectorAll('.card');
+
 let deck = document.querySelector('.deck');
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+let moves = document.querySelector('.moves span');
 
- function displayCard(card) {
- 	openCards.push(card);
+let restartButton = document.querySelector('.restart');
+
+let timer = document.querySelector('.timer span');
+
+/* Functions */
+
+/**
+* @description Display a card. Adds show and open classes.
+* @param {card} the card to display.
+*/
+function displayCard(card) {
+	openCards.push(card);
  	card.classList.add('show', 'open');
+
  }
- function hideCard(card) {
- 	card.classList.remove('show', 'open');
- }
+
+/**
+* @description Displays a modal box with game results: time, star rating and moves.
+*/
+function gameWin() {
+ 	alert('Has ganado!');
+
+}
+
+/**
+* @description Hides a card. Removes show, open, wrong and match classes and adds hide class.
+* @param {card} the card to hide.
+*/
+function hideCard(card) {
+ 	card.classList.remove('show', 'open', 'wrong', 'match');
+ 	card.classList.add('hide');
+
+}
+
+/**
+* @description Hides a card array. Removes show, open, wrong and match classes and adds hide class to each card.
+* @param {array} card array to hide.
+*/
+function hideAllCards(cards) {
+	for (let card of cards) {
+		hideCard(card);
+	}
+
+}
+
+/**
+* @description Increments 1 to move counter.
+*/
+function incrementCounter() {
+ 	++moves.textContent;
+
+}
+
+/**
+* @description Adds match class to card1 and card2 and increments 2 to match cards counter.
+* @param {card} card1
+* @param {card} card2
+*/
 function matchCards(card1, card2) {
 	card1.classList.add('match');
 	card2.classList.add('match');
+	counterMatchCards += 2;
+
+}
+/**
+* @description Prepares desk to a new game. Resets all counters, shuffles card symbols, and hides all of them.
+*/
+function newGame() {
+	counterMatchCards = 0;
+	moves.textContent = 0;
+	hideAllCards(cards);
+	/* Creates an document fragment to avoid 16 reflow and repaint */
+	//let virtualDOM = document.createDocumentFragment();
+	//virtualDOM = cards;
+	//console.log(virtualDOM)
+	/* Shuffle card's SYMBOLS with shuffle function */
+	shuffle(symbols);
+	//console.log(virtualDOM);
+	/* Counter to iterate SYMBOLS array */
+	let i = 0;
+	for (let card of cards) {
+		card.firstElementChild.className = '';
+		card.firstElementChild.className = symbols[i];
+		++i;
+	}
+	/* When we have shuffled all card's SYMBOLS, then we reflow and repaint once with virtualDOM */
+	//cards = virtualDOM;
+
 }
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+/**
+* @description Shuffle function from http://stackoverflow.com/a/2450976
+* @param {array} array
+* @returns {array} the original array with a random index.
+*/
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -34,36 +135,43 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
+
 }
 
 
+function updateTime() {
+	++timer.textContent;
+}
+
+/* Listeners */
 deck.addEventListener ('click', function cardClick(event) {
 	if (event.target.nodeName === 'LI' && !event.target.classList.contains('match')) {
 			displayCard(event.target);
 			if (openCards.length > 1) {
-				if (openCards[0].firstElementChild.className === openCards[1].firstElementChild.className && openCards[0] != openCards[1]) {
+				if (openCards[0].firstElementChild.className == openCards[1].firstElementChild.className && openCards[0] != openCards[1]) {
 					matchCards(openCards[0], openCards[1]);
 					openCards = [];
-				}
-				else {
-					hideCard(openCards[0]);
-					hideCard(openCards[1]);
+					if (counterMatchCards == 16) {
+						gameWin();
+					}
+				} else {
+					openCards[0].classList.add('wrong');
+					openCards[1].classList.add('wrong');
+					setTimeout(hideAllCards, 1000, openCards);
 					openCards = [];
 				}
+				incrementCounter();
 			}
 	}	
 });
 
+restartButton.addEventListener('click', function restartClick(event) {
+	console.log('Hello');
+	newGame();
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+});
+
+newGame();
+
+setInterval(updateTime, 1000);
