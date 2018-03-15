@@ -48,6 +48,8 @@ let resultStars = document.querySelector('.resultStars');
 
 let resultTime = document.querySelector('.resultTime');
 
+let startGame = document.querySelector('.start-game');
+
 /* Functions */
 
 /**
@@ -201,6 +203,11 @@ restartButton.addEventListener('click', function restartClick(event) {
 
 });
 
+startGame.addEventListener('click', function restartClick(event) {
+	modal.style.display = "none";
+    newGame();
+
+});
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
