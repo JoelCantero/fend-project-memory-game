@@ -64,6 +64,7 @@ function displayCard(card) {
 * @description Displays a modal box with game results: time, star rating and moves.
 */
 function gameWin() {
+	clearInterval(timeIncrementor);
 	resultTime.textContent = timer.textContent + 'seconds';
 	resultStars.innerHTML = stars.innerHTML;
 	resultMoves.textContent = moves.textContent;
@@ -209,4 +210,4 @@ window.onclick = function(event) {
 
 newGame();
 
-setInterval(updateTime, 1000);
+let timeIncrementor = setInterval(updateTime, 1000);

@@ -22,7 +22,9 @@ body {
 }
 
 button {
-    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%) !important;
+    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    border: none;
+    border-radius: 50px;
     color: white;
     font-family: 'Muli';
     padding: 15px;
@@ -191,10 +193,12 @@ header {
 /* Modal Content */
 .modal-content {
     background-color: #fefefe;
+    border: 1px solid #888;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
-    width: 660px;
+    text-align: center;
+    width: 350px;
+
 }
 
 /* The Close Button */
