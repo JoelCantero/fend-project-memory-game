@@ -20,9 +20,11 @@ let symbols = [
 	'fa fa-google'
 ];
 
+let counterMatchCards = 0;
+
 let openCards = [];
 
-let counterMatchCards = 0;
+let timeIncrementor;
 
 /* Selectors */
 
@@ -124,6 +126,7 @@ function matchCards(card1, card2) {
 * @description Prepares desk to a new game. Resets all counters, shuffles card symbols, and hides all of them.
 */
 function newGame() {
+	firstMovement = true;
 	counterMatchCards = 0;
 	moves.textContent = 0;
 	timer.textContent = 0;
@@ -177,39 +180,38 @@ function updateTime() {
 
 /* Listeners */
 deck.addEventListener ('click', function cardClick(event) {
-	if (event.target.nodeName === 'LI' && !event.target.classList.contains('match')) {
-			displayCard(event.target);
-			if (openCards.length > 1) {
-				incrementMoves();
-				if (openCards[0].firstElementChild.className == openCards[1].firstElementChild.className && openCards[0] != openCards[1]) {
-					matchCards(openCards[0], openCards[1]);
-					openCards = [];
-					if (counterMatchCards == 16) {
-						gameWin();
-					}
-				} else {
+	if (event.target.nodeName === 'LI' && !event.target.classList.contains('match') && event.target != openCards[0]) {
+		if (firstMovement) {
+			timeIncrementor = setInterval(updateTime, 1000);
+			firstMovement = false;
+		}
+		displayCard(event.target);
+		if (openCards.length > 1) {
+			if (openCards[0].firstElementChild.className == openCards[1].firstElementChild.className && openCards[0] != openCards[1]) {
+				matchCards(openCards[0], openCards[1]);
+				openCards = [];
+				if (counterMatchCards == 16) {
+					gameWin();
+				}
+			}	else {
 					openCards[0].classList.add('wrong');
 					openCards[1].classList.add('wrong');
 					setTimeout(hideAllCards, 1000, openCards);
 					openCards = [];
+
 				}
-			}
+		incrementMoves();
+		}
 	}	
 });
 
 restartButton.addEventListener('click', function restartClick(event) {
-	console.log('Hello');
 	newGame();
 
 });
 
-startGame.addEventListener('click', function restartClick(event) {
-	modal.style.display = "none";
-    newGame();
-
-});
 window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target == modal || event.target == startGame) {
         modal.style.display = "none";
         newGame();
     }
@@ -217,4 +219,3 @@ window.onclick = function(event) {
 
 newGame();
 
-let timeIncrementor = setInterval(updateTime, 1000);
