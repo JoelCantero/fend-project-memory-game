@@ -187,6 +187,7 @@ deck.addEventListener ('click', function cardClick(event) {
 		}
 		displayCard(event.target);
 		if (openCards.length > 1) {
+			incrementMoves();
 			if (openCards[0].firstElementChild.className == openCards[1].firstElementChild.className && openCards[0] != openCards[1]) {
 				matchCards(openCards[0], openCards[1]);
 				openCards = [];
@@ -200,7 +201,7 @@ deck.addEventListener ('click', function cardClick(event) {
 					openCards = [];
 
 				}
-		incrementMoves();
+		
 		}
 	}	
 });

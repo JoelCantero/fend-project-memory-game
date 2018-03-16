@@ -26,6 +26,7 @@ button {
     border: none;
     border-radius: 50px;
     color: white;
+    cursor: pointer;
     font-family: 'Muli';
     padding: 15px;
     text-transform: uppercase;
