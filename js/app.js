@@ -1,24 +1,9 @@
 
 /* Variables */
 
-let symbols = [
-	'fa fa-css3', 
-	'fa fa-css3', 
-	'fa fa-wifi', 
-	'fa fa-wifi', 
-	'fa fa-html5', 
-	'fa fa-html5', 
-	'fa fa-git', 
-	'fa fa-git', 
-	'fa fa-chrome', 
-	'fa fa-chrome', 
-	'fa fa-tablet', 
-	'fa fa-tablet', 
-	'fa fa-laptop', 
-	'fa fa-laptop', 
-	'fa fa-google', 
-	'fa fa-google'
-];
+let symbols = "fa-css3 fa-wifi fa-html5 fa-git fa-chrome fa-tablet fa-laptop fa-google".split(" "); // Make an array without having to type , and ' ' after every entry
+symbols = symbols.map((word) => `fa ${word}`); // makes `fa-diamond` into `fa fa-diamond`
+symbols = [...symbols, ...symbols]; // Doubles the array elements
 
 let counterMatchCards = 0;
 
@@ -69,7 +54,7 @@ function displayCard(card) {
 */
 function gameWin() {
 	clearInterval(timeIncrementor);
-	resultTime.textContent = timer.textContent + 'seconds';
+	resultTime.textContent = timer.textContent + ' seconds';
 	resultStars.innerHTML = stars.innerHTML;
 	resultMoves.textContent = moves.textContent;
  	modal.style.display = "block";
@@ -126,6 +111,8 @@ function matchCards(card1, card2) {
 * @description Prepares desk to a new game. Resets all counters, shuffles card symbols, and hides all of them.
 */
 function newGame() {
+	clearInterval(timeIncrementor);
+	openCards = [];
 	firstMovement = true;
 	counterMatchCards = 0;
 	moves.textContent = 0;
